@@ -3,6 +3,7 @@ import SpeechPage from "./pages/speech/SpeechPage";
 import Summarize from "./pages/summary/Summarize";
 import TeamPage from "./pages/team/TeamPage";
 import RealTime from "./pages/realtime/RealTime";
+import './App.css'
 import{BrowserRouter as Router,
   Routes,
   Route
@@ -11,6 +12,7 @@ import Footer from "./component/Footer/Footer";
 import Scroll from "./component/ScrollToTop/Scroll";
 import Navbar from "./component/navbar/Navbar";
 function App() {
+  
   return (
     <><Router>
       <Navbar/>

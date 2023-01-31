@@ -3,7 +3,10 @@
     height:500px;
     background-size: cover;
 }
-
+body{
+  background-image: linear-gradient(to top, #ffffff 100%, #dddbdb 50%);
+  font-family:monospace;
+}
 
 body hr{
     width:50px;

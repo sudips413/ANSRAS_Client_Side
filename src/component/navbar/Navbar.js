@@ -1,13 +1,21 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import './navbar.css'
+import { useEffect } from 'react'
+import axios from 'axios'
 
 export default function Navbar() {
+    useEffect(()=>{
+        console.log('hello')
+        axios.post('http://localhost:8000/loadmodel')
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err))
+      },[])
   return (
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
 			<div class="container" >    
-				<a class="navbar-brand"><Link className='links-title' to="/"><i class="fas fa-microphone"/> ANSRAS </Link></a>
+				<a className='navbar-brand' href=" "><Link className='links-title' to="/"><i class="fas fa-microphone"/> ANSRAS </Link></a>
                 <button class="navbar-toggler text-white" type="button" 
                     data-toggle="collapse"
                     data-target="#navbarSupportedContent"

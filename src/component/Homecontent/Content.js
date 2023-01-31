@@ -1,9 +1,18 @@
-import React from 'react'
+
 import './content.css'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import axios from 'axios'
+
+
 // import img from '../../static/image/background.jpg'
 
 export default function Content() {
+  useEffect(()=>{
+    axios.post('http://localhost:8000/loadmodel')
+    .then(res => console.log(res.data))
+    .catch(err => console.log(err))
+  },[])
   return (
     <div className='content'>
         <div className='img'>

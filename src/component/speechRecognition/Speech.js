@@ -37,6 +37,8 @@ function Speech() {
 
   
   const getthesummary =(e)=>{
+    document.getElementById('summarybutton').disabled = true
+    document.getElementById('summarybutton').style.cursor = 'not-allowed'
     let stringlength=audiofiletranscript.length
     // console.log(stringlength)
     if(stringlength>150){
@@ -59,6 +61,8 @@ function Speech() {
         function(res){
           setLoadinggif_summary(false)
           setsummarywait(false)
+          document.getElementById('summarybutton').disabled = false
+        document.getElementById('summarybutton').style.cursor = 'pointer'
           setaudiosummary(res.data)
           var count = 0;
           for (var i = 0; i < res.data.length; i++) {
@@ -110,32 +114,36 @@ function Speech() {
     }  
 
   }
-
-
-  
-
-
-
   const handleFile = (e) => {
+    
     if(e.target.files[0]==='undefined'){
       alert("Please upload a .flac or .wav file")
 
     }else{
+    document.getElementById('audio-player').style.display = 'block'
     setAudiopath(URL.createObjectURL(e.target.files[0]))
     setAudio(e.target.files[0])
     // console.log(e.target.files[0].name)
     document.getElementById('filename').innerHTML = e.target.files[0].name
   }
   }
-  const handleSubmit = (e) => { 
+  const handleSubmit = (e) => {
+     
     if (audio===''){
-      document.getElementById('nofile-error').innerHTML = 'No file selected'
+      document.getElementById('nofile-error').style.display = 'block'
+      document.getElementById('audiofile').style.border = '2px dotted red'
     }
     else{
+
     // let ext=audio.name.split('.').pop()
     // console.log(audio.name)
-    // if(ext === 'flac' || ext === 'wav' || ext === 'mp3'){    
+    // if(ext === 'flac' || ext === 'wav' || ext === 'mp3'){  
+      document.getElementById('upload-file-info').style.display = 'none'
       
+      document.getElementById('audiofile').style.border = '2px dotted green'
+      document.getElementById('nofile-error').style.display = 'none'
+      document.getElementById('transcriptbutton').disabled = true
+      document.getElementById('transcriptbutton').style.cursor = 'not-allowed'
       setShowwaitmessage(true)
       setLoadinggif_audio(true) 
       const formData = new FormData()
@@ -159,7 +167,11 @@ function Speech() {
           if(res.data[i]===' '){
             count=count+1
           }
+
         }
+        
+        document.getElementById('transcriptbutton').disabled = false
+        document.getElementById('transcriptbutton').style.cursor = 'pointer'
         setWordcount(count)
         setAudiofiletranscript(res.data)
         const downloadTextFile = JSON.stringify(res.data);
@@ -169,12 +181,15 @@ function Speech() {
       }  
       )
       .catch((error)=>{
+        document.getElementById('transcriptbutton').disabled = false
+        document.getElementById('transcriptbutton').style.cursor = 'pointer'
         // console.log(error)
         // console.log("no response")
         setShowwaitmessage(false)
         setLoadinggif_audio(false)
-        document.getElementById('upload-file-info').innerHTML = "There was error in uploading the file or server crashed"
+        document.getElementById('upload-file-info').style.display = 'block'
       })
+
       
     // }
      
@@ -188,13 +203,13 @@ function Speech() {
         <div class="audio-input text-center">   
           <img src={audiofile} alt="audiofile" className='mt-2' width="auto" height="150"/>      
           <br/>
-          <span id="nofile-error"></span>
+          <span id="nofile-error" style={{display:'none'}}><i className='fa fa-exclamation-triangle'></i> Please Upload audio file</span>
           <br/>
           <input type="file" id="file" accept="audio/*" onChange={handleFile}/>
-          <label for="file" class="btn btn-primary" style={{borderRadius:"0px",border:"2px dotted"}}><i class="fa fa-file" style={{color:"green"}}/>  Upload Audio File</label>
+          <label id="audiofile" for="file" class="btn btn-primary" style={{borderRadius:"0px",border:"2px dotted"}}><i class="fa fa-file" style={{color:"green"}}/>  Upload Audio File</label>
           <p id="filename"></p>
           <br/>
-          <div class="audio-player mt-3">
+          <div id='audio-player' class="audio-player mt-3" style={{display:'none'}}>
             <ReactAudioPlayer
               className='col-xs-12 col-lg-6 col-md-6'
               src={audiopath}
@@ -202,12 +217,14 @@ function Speech() {
               controls
             />
           </div>  
-          <button onClick={handleSubmit} class="btn btn-primary "><i className='fa  fa-arrow-right' style={{color:"blue"}}/> Transcript</button>
+          <button id="transcriptbutton" onClick={handleSubmit} class="btn btn-primary "><i className='fa  fa-arrow-right' style={{color:"blue"}}/> Transcript</button>
              
         
-        <p id="upload-file-info"></p>
+        <p id="upload-file-info" style={{color:"red",display:"none",marginTop:"20px"}}>
+        <i className='fa fa-exclamation-triangle'></i> There was error in uploading the file or server crashed. Please try again later.
+        </p>
         <br/>
-        {showwaitmessage && <p id="wait-message"> Please wait while we work on your audio file and generate the transcript ...</p>}
+        {showwaitmessage && <p id="wait-message mt-5">Please wait while we work on your audio file and generate the transcript ...</p>}
         {loadinggif_audio && <img class="col-xs-6 col-lg-3 col-md-6" src={loading} alt="loading" width="300px" height="200px"/>}
         <br/>
         {!loadinggif_audio && showsummarybutton && <textarea class="col-lg-8 col-md-8 col-xs-8" value={Transcript}disabled></textarea>}
@@ -216,7 +233,7 @@ function Speech() {
         { !loadinggif_audio && showsummarybutton && <button onClick={transcript_downloader} class="btn btn-primary mt-2"><i className='fa  fa-download' style={{color:"blue"}}/> Transcript</button>} 
 
         <br/>
-        { !loadinggif_audio && showsummarybutton && <button onClick={getthesummary} class="btn btn-primary mt-2"><i className='fa  fa-arrow-right' style={{color:"blue"}}/> Summary</button>} 
+        { !loadinggif_audio && showsummarybutton && <button onClick={getthesummary} id="summarybutton" class="btn btn-primary mt-2"><i className='fa  fa-arrow-right' style={{color:"blue"}}/> Summary</button>} 
 
         <br/>
         
