@@ -18,9 +18,15 @@ export default class Mics extends React.Component {
       wavFileblob: null,
       status:false,
       strokestate:false,
+      selectedOption: "Wav2Vec",
     }
   }
 
+  changeOption = (e) => {
+    let value = document.getElementById("select").value;
+    this.setState({selectedOption:value});
+    console.log(value);
+  }
 
   startRecording = () => {
     this.setState({ record: true });
@@ -62,7 +68,7 @@ export default class Mics extends React.Component {
     const {
         setAudioPath
       } = this.props;
-      const test = async (e) =>{
+      const test_wav2vec = async (e) =>{
         if (this.state.blobURL != null){
         let blob = await fetch(this.state.blobURL).then(r => r.blob());
         console.log("blob: ", blob);
@@ -96,9 +102,54 @@ export default class Mics extends React.Component {
       }
         
      }
+     const test_own = async (e) =>{
+      if (this.state.blobURL != null){
+      let blob = await fetch(this.state.blobURL).then(r => r.blob());
+      console.log("blob: ", blob);
+    
+    
+      let wavFile = new File([blob], "audio.wav"); 
+      // {type:this.state.wavFileblob.type});
+      //   console.log(wavFile);
+      const formData = new FormData()
+      formData.append('audio', wavFile)
+      axios.post(      
+        'http://localhost:8000/audio_live_own', formData
+        
+      )
+      .then((res)=> {
+        
+        console.log(res)
+        
+        document.getElementById("textsuccess").innerHTML = res.data
+        
+        
+      }  
+      )
+      .catch((error)=>{
+        console.log(error)
+        console.log("no response")
+      })
+    }
+    else{
+      alert("Please record audio first")
+    }
+      
+   }
      let strokeColor=this.state.strokestate ? "green" : undefined
     return (
       <div className='audio'>
+        <div>
+          <span>Select the Model </span>
+          
+        <select id="select" onChange={this.changeOption}>
+          <option value="Wav2Vec">Wav2Vec</option>
+          <option value="CNN-ResNet-BiLSTM">CNN-Resnet</option>
+        </select>
+        <br/>
+        <span>Current Model: {this.state.selectedOption}</span>
+        </div>
+        
         <img src={mic} alt="mic" className="mic mt-3" />
         <br/>
         <br/>
@@ -135,7 +186,8 @@ export default class Mics extends React.Component {
           <button className='btn col-2' onClick={this.startRecording} type="button"><i className='fa fa-play' style={{paddingRight:"5px",color:"green"}}></i>Start</button>
           <button className='btn col-2' onClick={this.stopRecording} type="button"><i className='fa fa-stop' style={{paddingRight:"5px",color:"green"}}></i> Stop</button>
           
-          <button className='btn col-2' onClick={test} type="button">Transcript</button>
+          {this.state.selectedOption === "Wav2Vec"?<button className='btn col-2' onClick={test_wav2vec} type="button">Transcript- WV</button>:
+          <button className='btn col-2' onClick={test_own} type="button">Transcript- CNN</button>}
         </div>
         <br/>
         <div class=" col">

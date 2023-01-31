@@ -79,3 +79,12 @@
 .mic{
   height: 200px;
 }
+select{
+  width: 10%;
+  height: 40px;
+  border: 2px solid rgb(176, 56, 56);
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  background-color: #87d5e8;
+}
