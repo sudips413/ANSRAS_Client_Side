@@ -69,6 +69,9 @@ export default class Mics extends React.Component {
         setAudioPath
       } = this.props;
       const test_wav2vec = async (e) =>{
+        //display the status and result
+        document.getElementById("textsuccess").style.display = "none";
+        document.getElementById("showstatus").style.display = "block";
         if (this.state.blobURL != null){
         let blob = await fetch(this.state.blobURL).then(r => r.blob());
         console.log("blob: ", blob);
@@ -84,12 +87,10 @@ export default class Mics extends React.Component {
           
         )
         .then((res)=> {
-          
-          console.log(res)
-          
+          document.getElementById("textsuccess").style.display = "block";
+          document.getElementById("showstatus").style.display = "none";
           document.getElementById("textsuccess").innerHTML = res.data
-          
-          
+       
         }  
         )
         .catch((error)=>{
@@ -103,6 +104,8 @@ export default class Mics extends React.Component {
         
      }
      const test_own = async (e) =>{
+      document.getElementById("textsuccess").style.display = "none";
+      document.getElementById("showstatus").style.display = "block";
       if (this.state.blobURL != null){
       let blob = await fetch(this.state.blobURL).then(r => r.blob());
       console.log("blob: ", blob);
@@ -118,16 +121,12 @@ export default class Mics extends React.Component {
         
       )
       .then((res)=> {
-        
-        console.log(res)
-        
+        document.getElementById("showstatus").style.display = "none";
+        document.getElementById("textsuccess").style.display = "block";
         document.getElementById("textsuccess").innerHTML = res.data
-        
-        
       }  
       )
       .catch((error)=>{
-        console.log(error)
         console.log("no response")
       })
     }
@@ -190,6 +189,7 @@ export default class Mics extends React.Component {
           <button className='btn col-2' onClick={test_own} type="button">Transcript- CNN</button>}
         </div>
         <br/>
+        <span id="showstatus" style={{color:"blue",display:"none"}}><i className="fa fa-info-circle" ></i> STT in Process...</span>
         <div class=" col">
             <div class=" col">
             <p id="textsuccess" class=" contain col">

@@ -10,7 +10,7 @@ import axios from 'axios'
 export default function Content() {
   useEffect(()=>{
     axios.post('http://localhost:8000/loadmodel')
-    .then(res => console.log(res.data))
+    .then(res => console.log("model loaded "))
     .catch(err => console.log(err))
   },[])
   return (

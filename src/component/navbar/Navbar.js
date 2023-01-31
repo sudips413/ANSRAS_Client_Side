@@ -1,16 +1,10 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import './navbar.css'
-import { useEffect } from 'react'
-import axios from 'axios'
+
 
 export default function Navbar() {
-    useEffect(()=>{
-        console.log('hello')
-        axios.post('http://localhost:8000/loadmodel')
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err))
-      },[])
+    
   return (
     <div>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
