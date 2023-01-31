@@ -15,17 +15,23 @@ export default class Mics extends React.Component {
     super(props);
     this.state = {
       record: false,
-      wavFileblob: null
+      wavFileblob: null,
+      status:false,
+      strokestate:false,
     }
   }
 
 
   startRecording = () => {
     this.setState({ record: true });
+    this.setState({status:false});
+    this.setState({strokestate:true})
   }
 
   stopRecording = () => {
     this.setState({ record: false });
+    this.setState({status:true});
+    this.setState({strokestate:false});
   }
 
   onData(recordedBlob) {
@@ -49,19 +55,10 @@ export default class Mics extends React.Component {
 
   // };
   Player = () => (
-    <AudioPlayer
-      autoPlay
-      src={this.state.blobURL}
-      onPlay={e => console.log("onPlay")}
-      // other props here
-    />
+    this.state.status && <AudioPlayer autoPlay src={this.state.blobURL} onPlay={e => console.log("onPlay")} />  
 
   )
-  
-  
-
   render() {
-
     const {
         setAudioPath
       } = this.props;
@@ -71,9 +68,8 @@ export default class Mics extends React.Component {
         console.log("blob: ", blob);
       
       
-        let wavFile = new File([blob], "audio.wav");
+        let wavFile = new File([blob], "audio.wav"); 
         // {type:this.state.wavFileblob.type});
-          
         //   console.log(wavFile);
         const formData = new FormData()
         formData.append('audio', wavFile)
@@ -100,6 +96,7 @@ export default class Mics extends React.Component {
       }
         
      }
+     let strokeColor=this.state.strokestate ? "green" : undefined
     return (
       <div className='audio'>
         <img src={mic} alt="mic" className="mic mt-3" />
@@ -112,9 +109,9 @@ export default class Mics extends React.Component {
             record={this.state.record}
             className="sound-wave col"
             onStop={this.onStop}
-            onData={this.onData}
-            strokeColor="green"
-            strokeWidth={2}
+            onData={this.onData}            
+            strokeColor={strokeColor}
+            strokeWidth={5}            
             backgroundColor="white" 
             setAudioPath={setAudioPath}
             mimeType="audio/wav"
@@ -122,18 +119,21 @@ export default class Mics extends React.Component {
             sampleRate={96000}        // defaults -> 44100 (44.1 kHz).  It accepts values only in range: 22050 to 96000 (available in React-Mic-Gold)
             timeSlice={3000}
           />
+          
           <br/>
           <br />
+          {this.state.status &&
           <audio
             className='player col-xs-12 col-md-6 col-lg-6'
             ref="audioSource"
             controls="controls"
             src={this.state.blobURL}
           />
+          } 
           <br/>
           <br/>
-          <button className='btn col-2' onClick={this.startRecording} type="button">Start</button>
-          <button className='btn col-2' onClick={this.stopRecording} type="button">Stop</button>
+          <button className='btn col-2' onClick={this.startRecording} type="button"><i className='fa fa-play' style={{paddingRight:"5px",color:"green"}}></i>Start</button>
+          <button className='btn col-2' onClick={this.stopRecording} type="button"><i className='fa fa-stop' style={{paddingRight:"5px",color:"green"}}></i> Stop</button>
           
           <button className='btn col-2' onClick={test} type="button">Transcript</button>
         </div>
