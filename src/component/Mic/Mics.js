@@ -72,26 +72,32 @@ export default class Mics extends React.Component {
       const handlesummary = async (e) => {
         document.getElementById("showstatus").style.display = "block";
         e.preventDefault();
-        let data = {
-          texts: this.state.transcript
-        }
-        let input = JSON.stringify(data)
-        let customConfig = {
-          headers: {
-            'Content-Type': 'application/json'
+        let audiolength = this.state.transcript.split(" ").length
+        if (audiolength > 50){
+          let data = {
+            texts: this.state.transcript
           }
-        }
-        axios.post('http://localhost:8000/input-text',input, customConfig).then((res) => {
-          this.setState({summary:res.data})
-          document.getElementById("summary").style.display = "block";
+          let input = JSON.stringify(data)
+          let customConfig = {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+          axios.post('http://localhost:8000/input-text',input, customConfig).then((res) => {
+            this.setState({summary:res.data})
+            document.getElementById("summary").style.display = "block";
+            document.getElementById("showstatus").style.display = "none";
+            
+        })
+        .catch((error) => {
+          alert(" Server Error")
+          console.log(error)
           document.getElementById("showstatus").style.display = "none";
-          
-      })
-      .catch((error) => {
-        alert(" Server Error")
-        console.log(error)
-        document.getElementById("showstatus").style.display = "none";
-      })
+        })
+      }
+      else{
+        alert("Please record audio more than 50 words")
+      }
       }  
       const test_wav2vec = async (e) =>{
         //display the status and result
