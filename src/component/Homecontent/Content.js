@@ -19,8 +19,8 @@ export default function Content() {
              {/* <img  className ="img"src= {img} alt="" /> */}
          
         </div>    
-
-        <h3 class="project-title text-center mt-3">Automatic Nepali Speech Recognition and Summary</h3>
+        <h1 class="project-title text-center mt-3">स्वर-सारांश</h1>
+        <h4 class="project-title text-center mt-3">Automatic Nepali Speech Recognition and Summary</h4>
             
             <div class="container1">
                 <p class="about">
@@ -30,7 +30,7 @@ export default function Content() {
                 mobile devices as well.
                 <br/>
                 For speech recognition, we have used wav2vec 2.0 model (facebook/wav2vec2-large-xlsr-53). The model is finetuned on the openslr dataset.
-                Similarly, for text summarization, we have used Extractive Summary using textRank Algorithm.
+                Similarly, for text summarization, we have used Extractive Summary using textRank Algorithm. Another model for speech to text is CNN-Resner-BiLSTM.
                 
                 </p>
             </div>
