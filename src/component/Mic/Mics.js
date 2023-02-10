@@ -97,6 +97,7 @@ export default class Mics extends React.Component {
       }
       else{
         alert("Please record audio more than 50 words")
+        document.getElementById("showstatus").style.display = "none";
       }
       }  
       const test_wav2vec = async (e) =>{
@@ -122,7 +123,7 @@ export default class Mics extends React.Component {
           document.getElementById("showstatus").style.display = "none";
           document.getElementById("textsuccess").innerHTML = res.data
           this.setState({transcript:res.data})
-        console.log(this.state.transcript)
+          console.log(this.state.transcript)
        
         }  
         )
