@@ -19,13 +19,14 @@ export default class Mics extends React.Component {
       status:false,
       strokestate:false,
       selectedOption: "Wav2Vec",
+      transcript:""
     }
   }
 
   changeOption = (e) => {
     let value = document.getElementById("select").value;
     this.setState({selectedOption:value});
-    console.log(value);
+    // console.log(value);
   }
 
   startRecording = () => {
@@ -40,9 +41,9 @@ export default class Mics extends React.Component {
     this.setState({strokestate:false});
   }
 
-  onData(recordedBlob) {
-    console.log('chunk of real-time data is: ', recordedBlob);
-  }
+  // onData(recordedBlob) {
+  //   console.log('chunk of real-time data is: ', recordedBlob);
+  // }
   onStop = (blobObject) => {
     const { setAudioPath,wavFileblob } = this.props; // eslint-disable-line
     // console.info("onStop blobObject: ", blobObject);
@@ -51,7 +52,7 @@ export default class Mics extends React.Component {
       wavFileblob: blobObject.blob
     });
     blobObject.blobURL = new Date();
-    console.info("blobObject: ", blobObject);
+    // console.info("blobObject: ", blobObject);
     
     
     
@@ -65,16 +66,40 @@ export default class Mics extends React.Component {
 
   )
   render() {
-    const {
+      const {
         setAudioPath
       } = this.props;
+      const handlesummary = async (e) => {
+        document.getElementById("showstatus").style.display = "block";
+        e.preventDefault();
+        let data = {
+          texts: this.state.transcript
+        }
+        let input = JSON.stringify(data)
+        let customConfig = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+        axios.post('http://localhost:8000/input-text',input, customConfig).then((res) => {
+          this.setState({summary:res.data})
+          document.getElementById("summary").style.display = "block";
+          document.getElementById("showstatus").style.display = "none";
+          
+      })
+      .catch((error) => {
+        alert(" Server Error")
+        console.log(error)
+        document.getElementById("showstatus").style.display = "none";
+      })
+      }  
       const test_wav2vec = async (e) =>{
         //display the status and result
         document.getElementById("textsuccess").style.display = "none";
         document.getElementById("showstatus").style.display = "block";
         if (this.state.blobURL != null){
         let blob = await fetch(this.state.blobURL).then(r => r.blob());
-        console.log("blob: ", blob);
+        // console.log("blob: ", blob);
       
       
         let wavFile = new File([blob], "audio.wav"); 
@@ -90,6 +115,8 @@ export default class Mics extends React.Component {
           document.getElementById("textsuccess").style.display = "block";
           document.getElementById("showstatus").style.display = "none";
           document.getElementById("textsuccess").innerHTML = res.data
+          this.setState({transcript:res.data})
+        console.log(this.state.transcript)
        
         }  
         )
@@ -108,7 +135,7 @@ export default class Mics extends React.Component {
       document.getElementById("showstatus").style.display = "block";
       if (this.state.blobURL != null){
       let blob = await fetch(this.state.blobURL).then(r => r.blob());
-      console.log("blob: ", blob);
+      // console.log("blob: ", blob);
     
     
       let wavFile = new File([blob], "audio.wav"); 
@@ -124,6 +151,9 @@ export default class Mics extends React.Component {
         document.getElementById("showstatus").style.display = "none";
         document.getElementById("textsuccess").style.display = "block";
         document.getElementById("textsuccess").innerHTML = res.data
+        this.setState({transcript:res.data})
+        console.log(this.state.transcript)
+        
       }  
       )
       .catch((error)=>{
@@ -190,17 +220,19 @@ export default class Mics extends React.Component {
         </div>
         <br/>
         <span id="showstatus" style={{color:"blue",display:"none"}}><i className="fa fa-info-circle" ></i> STT in Process...</span>
+        
         <div class=" col">
             <div class=" col">
             <p id="textsuccess" class=" contain col">
-
             </p>
-            
             </div>
         </div>
+        {this.state.transcript === ""? null :<button id="sumbutton"className='btn col-2' onClick={handlesummary}> Summary </button>}
+        <span id="showstatus" style={{color:"blue",display:"none"}}><i className="fa fa-info-circle" ></i> Summary in Process...</span>
         <br/>
-        
-        
+        <center>
+        <textarea  id="summary" style={{display:'none'}} class="col-lg-8 col-xs-8 col-md-8" value={this.state.summary}  disabled></textarea>
+        </center>
       </div>
 
     );

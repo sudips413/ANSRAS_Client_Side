@@ -39,9 +39,9 @@ function Speech() {
   const getthesummary =(e)=>{
     document.getElementById('summarybutton').disabled = true
     document.getElementById('summarybutton').style.cursor = 'not-allowed'
-    let stringlength=audiofiletranscript.length
+    let stringlength=audiofiletranscript.split(" ").length
     // console.log(stringlength)
-    if(stringlength>150){
+    if(stringlength>50){
       setLoadinggif_summary(true)
       setsummarywait(true)
       const data = {
