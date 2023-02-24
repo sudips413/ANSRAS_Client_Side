@@ -140,6 +140,7 @@ export default class Mics extends React.Component {
       }
       else{
         alert("Please record audio first")
+        document.getElementById("showstatus").style.display = "none";
       }
         
      }
@@ -170,11 +171,13 @@ export default class Mics extends React.Component {
       }  
       )
       .catch((error)=>{
-        console.log("no response")
+        document.getElementById("showstatus").style.display = "none";
+          document.getElementById("no-response").innerHTML="No response from server"
       })
     }
     else{
       alert("Please record audio first")
+      document.getElementById("showstatus").style.display = "none";
     }
       
    }
@@ -240,9 +243,9 @@ export default class Mics extends React.Component {
         <span id="showstatus" style={{color:"green",display:"none"}}><i className="fa fa-info-circle" ></i> STT in Process...</span>
         <span id="no-response" style={{color:'red'}}></span>
         
-        <div class=" col">
-            <div class=" col">
-            <p id="textsuccess" style={{color:'palevioletred'}} class="contain col">
+        <div className=" col">
+            <div className=" col">
+            <p id="textsuccess" style={{color:'palevioletred'}} className="contain col">
             </p>
             </div>
         </div>
@@ -250,7 +253,7 @@ export default class Mics extends React.Component {
         <span id="summarystatus" style={{color:"blue",display:"none"}}><i className="fa fa-info-circle" ></i> Summary in Process...</span>
         <br/>
         <center>
-        <textarea  id="summary" style={{display:'none'}} class="col-lg-8 col-xs-8 col-md-8" value={this.state.summary}  disabled></textarea>
+        <textarea  id="summary" style={{display:'none'}} className="col-lg-8 col-xs-8 col-md-8" value={this.state.summary}  disabled></textarea>
         </center>
       </div>
 

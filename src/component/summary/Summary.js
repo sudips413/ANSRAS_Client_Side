@@ -163,7 +163,10 @@ export default function Summary() {
                   const blob = new Blob([downloadTextFile], { type: "text/plain" });
                   const url_text = URL.createObjectURL(blob);
                   setUrl_text(url_text)
-                  settalakosummary(res.data)            
+                  settalakosummary(res.data)   
+                  document.getElementById("input-text-error").style.display = "none"
+                  document.getElementById('textholder').style.border='2px solid green';
+
                 }
               )
               .catch((err)=>{
@@ -183,54 +186,54 @@ export default function Summary() {
   return (
     <div>
       <p className='summaryTitle mt-3 text-center'>|| SUMMARY || सारांश ||</p>
-        <div class="text mt-2">        
-        <div class="text-input  mt-5">
+        <div className="text mt-2">        
+        <div className="text-input  mt-5">
               <img src={txtfile} alt="txtfile" className='textfile mt-2' height={100} />
               <p className='filesummary'>FILE SUMMARY</p> 
               <span id='nofile-error' className='error' style={{display:"none"}}><i className='fa fa-exclamation-triangle'></i> Please select the file</span>
               <br/>
               <input type="file" id="file" accept="text/plain" onChange={handleFile} required/>                            
-              <label id="txtfile" for="file" class="btn btn-primary" style={{border:"2px dotted",borderRadius:"0px"}}><i class="fas fa-file" style={{color:"green"}}/> Upload txt File</label>
+              <label id="txtfile" htmlFor="file" className="btn btn-primary" style={{border:"2px dotted",borderRadius:"0px"}}><i className="fas fa-file" style={{color:"green"}}/> Upload txt File</label>
               <br/>
-              <p class="filename col">
+              <p className="filename col">
                 {txt.fileName} 
               </p>
               </div> 
-              <p id ="upload" class="message col">
+              <p id ="upload" className="message col">
               </p>                    
               <br/>
-              <div class="text-content col">                    
-              <button onClick={handleSubmit} id="summbtn" type="submit" class="btn btn-primary "><i className='fa  fa-arrow-right' style={{color:"orange"}}/>Summary</button>
+              <div className="text-content col">                    
+              <button onClick={handleSubmit} id="summbtn" type="submit" className="btn btn-primary "><i className='fa  fa-arrow-right' style={{color:"orange"}}/>Summary</button>
               <br/>
               <br/>
-              {waitstatus && <img class="col-xs-6 col-lg-3 col-md-6" src={loading} alt="wait" width="auto" height="auto"/>}
+              {waitstatus && <img className="col-xs-6 col-lg-3 col-md-6" src={loading} alt="wait" width="auto" height="auto"/>}
               <p id="success text-black"></p> 
-              { !waitstatus && downloadbuttonstatusfile && <textarea class="col-lg-8 col-xs-12 col-sm-12 col-md-8" value={mathikosummary} disabled></textarea>}
+              { !waitstatus && downloadbuttonstatusfile && <textarea className="col-lg-8 col-xs-12 col-sm-12 col-md-8" value={mathikosummary} disabled></textarea>}
               <br/>
-              {downloadbuttonstatusfile && <button onClick={input_text_downloader}  type="submit" class="btn btn-primary"><i className='fa  fa-download' style={{color:"blue"}}/> Summary</button>}
+              {downloadbuttonstatusfile && <button onClick={input_text_downloader}  type="submit" className="btn btn-primary"><i className='fa  fa-download' style={{color:"blue"}}/> Summary</button>}
                   
         </div>
         <br/><br/>        
     </div>
     {/* text input */}
     <hr/>
-    <div class="text">
-        <div class="text-input text-center mt-1">
+    <div className="text">
+        <div className="text-input text-center mt-1">
           <img src={type} alt="type" className='textfile mt-5' height={100} />
           <p className='filesummary'>TEXTS SUMMARY</p>
           <br/>
-          <textarea onChange={texthandle} id="textholder" class=" col-xs-12 col-sm-12 col-md-8 col=lg-8" placeholder='कृपया नेपाली मात्र प्रविष्ट गर्नुहोस्'></textarea>
+          <textarea onChange={texthandle} id="textholder" className=" col-xs-12 col-sm-12 col-md-8 col=lg-8" placeholder='कृपया नेपाली मात्र प्रविष्ट गर्नुहोस्'></textarea>
           <br/>
           <span id="input-text-error"></span>
           <br/>
-          <button onClick={textSubmit}  type="submit" class="btn btn-primary mt-2"><i className='fa fa-arrow-right' style={{color:"orange"}}/>  Summary</button>
+          <button onClick={textSubmit}  type="submit" className="btn btn-primary mt-2"><i className='fa fa-arrow-right' style={{color:"orange"}}/>  Summary</button>
           <br/>
-          {TalakoWaitstatus && <img class="col-xs-6 col-lg-3 col-md-3" src={loading} alt="wait" width="200px" height="200px"/>}
+          {TalakoWaitstatus && <img className="col-xs-6 col-lg-3 col-md-3" src={loading} alt="wait" width="200px" height="200px"/>}
           <br/>
           <p id="success text-black"></p>
-          {!TalakoWaitstatus && downloadbuttonstatustext && <textarea class="col-lg-8 col-xs-8 col-md-8" value={talakosummary} disabled></textarea>}
+          {!TalakoWaitstatus && downloadbuttonstatustext && <textarea className="col-lg-8 col-xs-8 col-md-8" value={talakosummary} disabled></textarea>}
           <br/>
-          {downloadbuttonstatustext && <button onClick={text_downloader}  type="submit" class="btn btn-primary mt-1"> <i className='fa  fa-download' style={{color:"blue"}}/> Summary</button>}
+          {downloadbuttonstatustext && <button onClick={text_downloader}  type="submit" className="btn btn-primary mt-1"> <i className='fa  fa-download' style={{color:"blue"}}/> Summary</button>}
     </div>
     <br/>
     <br/>
