@@ -127,72 +127,83 @@ function Speech() {
     document.getElementById('filename').innerHTML = e.target.files[0].name
   }
   }
-  const handleSubmit = (e) => {
-     
+  const handleSubmit = (e) => {   
+
     if (audio===''){
       document.getElementById('nofile-error').style.display = 'block'
       document.getElementById('audiofile').style.border = '2px dotted red'
     }
     else{
-
-    // let ext=audio.name.split('.').pop()
-    // console.log(audio.name)
-    // if(ext === 'flac' || ext === 'wav' || ext === 'mp3'){  
-      document.getElementById('upload-file-info').style.display = 'none'
-      
-      document.getElementById('audiofile').style.border = '2px dotted green'
-      document.getElementById('nofile-error').style.display = 'none'
-      document.getElementById('transcriptbutton').disabled = true
-      document.getElementById('transcriptbutton').style.cursor = 'not-allowed'
-      setShowwaitmessage(true)
-      setLoadinggif_audio(true) 
-      const formData = new FormData()
-      formData.append('audio', audio)
-      axios.post(      
-        'http://localhost:8000/audio', formData
-        
-      )
-      .then((res)=> {
-        setShowwaitmessage(false)
-        setLoadinggif_audio(false)
-        setShowbutton(true)
-        
-        // console.log(res)
-        document.getElementById('upload-file-info').innerHTML = "Upload Success!"
-        // document.getElementById("success").innerHTML = res.data
-        // setTranscript(res.data)
-        setTranscript(res.data)
-        var count = 0;
-        for (var i = 0; i < res.data.length; i++) {
-          if(res.data[i]===' '){
-            count=count+1
+      let ext = audio.name.split('.').pop()
+      let allowed_extensions = ['flac', 'wav', 'mp3', 'm4a', 'ogg', 'opus', 'webm'];
+      if(allowed_extensions.includes(ext)){ 
+        document.getElementById('upload-file-info').style.display = 'none'        
+        document.getElementById('audiofile').style.border = '2px dotted green'
+        document.getElementById('nofile-error').style.display = 'none'
+        document.getElementById('transcriptbutton').disabled = true
+        document.getElementById('transcriptbutton').style.cursor = 'not-allowed'
+        setShowwaitmessage(true)
+        setLoadinggif_audio(true) 
+        const formData = new FormData()
+        formData.append('audio', audio)
+        axios.post(      
+          'http://localhost:8000/audio', formData
+          
+        )
+        .then((res)=> {
+          if(res.data==='fail'){
+            document.getElementById('transcriptbutton').disabled = false
+            document.getElementById('transcriptbutton').style.cursor = 'pointer'
+            setShowwaitmessage(false)
+            setLoadinggif_audio(false) 
+            document.getElementById('upload-file-info').style.display = 'block'
           }
+          else{
+            setShowwaitmessage(false)
+            setLoadinggif_audio(false)
+            setShowbutton(true)
+            
+            
+            // console.log(res)
+            document.getElementById('upload-file-info').innerHTML = "Upload Success!"
+            // document.getElementById("success").innerHTML = res.data
+            // setTranscript(res.data)
+            setTranscript(res.data)
+            var count = 0;
+            for (var i = 0; i < res.data.length; i++) {
+              if(res.data[i]===' '){
+                count=count+1
+              }
 
-        }
-        
-        document.getElementById('transcriptbutton').disabled = false
-        document.getElementById('transcriptbutton').style.cursor = 'pointer'
-        setWordcount(count)
-        setAudiofiletranscript(res.data)
-        const downloadTextFile = JSON.stringify(res.data);
-        const blob = new Blob([downloadTextFile], { type: "text/plain" });
-        const urls = URL.createObjectURL(blob);
-        setTranscripturl(urls)
-      }  
-      )
-      .catch((error)=>{
-        document.getElementById('transcriptbutton').disabled = false
-        document.getElementById('transcriptbutton').style.cursor = 'pointer'
-        // console.log(error)
-        // console.log("no response")
-        setShowwaitmessage(false)
-        setLoadinggif_audio(false)
-        document.getElementById('upload-file-info').style.display = 'block'
-      })
+            }
+            
+            document.getElementById('transcriptbutton').disabled = false
+            document.getElementById('transcriptbutton').style.cursor = 'pointer'
+            setWordcount(count)
+            setAudiofiletranscript(res.data)
+            const downloadTextFile = JSON.stringify(res.data);
+            const blob = new Blob([downloadTextFile], { type: "text/plain" });
+            const urls = URL.createObjectURL(blob);
+            setTranscripturl(urls)
+          }
+        })
 
+        .catch((err)=>{
+          document.getElementById('transcriptbutton').disabled = false
+          document.getElementById('transcriptbutton').style.cursor = 'pointer'
+          // console.log(error)
+          // console.log("no response")
+          setShowwaitmessage(false)
+          setLoadinggif_audio(false)
+          document.getElementById('upload-file-info').style.display = 'block'
+        })
       
-    // }
-     
+      }
+    
+      else{       
+        document.getElementById('nofile-error').style.display = 'block'
+        document.getElementById('audiofile').style.border = '2px dotted red'
+      } 
   }
 
   }  

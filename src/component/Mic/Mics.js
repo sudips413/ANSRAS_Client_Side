@@ -33,12 +33,16 @@ export default class Mics extends React.Component {
     this.setState({ record: true });
     this.setState({status:false});
     this.setState({strokestate:true})
+    document.getElementById("start-recording").style.display = "none";
+    document.getElementById("stop-recording").style.display = "block";
   }
 
   stopRecording = () => {
     this.setState({ record: false });
     this.setState({status:true});
     this.setState({strokestate:false});
+    document.getElementById("start-recording").style.display = "block";
+    document.getElementById("stop-recording").style.display = "none";
   }
 
   // onData(recordedBlob) {
@@ -70,10 +74,11 @@ export default class Mics extends React.Component {
         setAudioPath
       } = this.props;
       const handlesummary = async (e) => {
-        document.getElementById("showstatus").style.display = "block";
         e.preventDefault();
         let audiolength = this.state.transcript.split(" ").length
         if (audiolength > 50){
+          document.getElementById("summarystatus").style.display = "block";
+
           let data = {
             texts: this.state.transcript
           }
@@ -121,6 +126,7 @@ export default class Mics extends React.Component {
         .then((res)=> {
           document.getElementById("textsuccess").style.display = "block";
           document.getElementById("showstatus").style.display = "none";
+          document.getElementById("summarystatus").style.display = "none";
           document.getElementById("textsuccess").innerHTML = res.data
           this.setState({transcript:res.data})
           console.log(this.state.transcript)
@@ -128,8 +134,8 @@ export default class Mics extends React.Component {
         }  
         )
         .catch((error)=>{
-          console.log(error)
-          console.log("no response")
+          document.getElementById("showstatus").style.display = "none";
+          document.getElementById("no-response").innerHTML="No response from server"
         })
       }
       else{
@@ -175,16 +181,19 @@ export default class Mics extends React.Component {
      let strokeColor=this.state.strokestate ? "green" : undefined
     return (
       <div className='audio'>
-        <div>
-          <span>Select the Model </span>
-          
-        <select id="select" onChange={this.changeOption}>
-          <option value="Wav2Vec">Wav2Vec</option>
-          <option value="CNN-ResNet-BiLSTM">CNN-Resnet</option>
-        </select>
-        <br/>
-        <span>Current Model: {this.state.selectedOption}</span>
-        </div>
+        
+          <center>       
+            <div className='model-selection col-lg-6 col-sm-12 col-xs-12 col-md-8'>
+              <span>Select the Model </span>
+              <select id="select" onChange={this.changeOption} style={{width:"30%"}}>
+                <option value="Wav2Vec">Wav2Vec</option>
+                <option value="CNN-ResNet-BiLSTM">CNN-Resnet</option>
+              </select>         
+              <br/>
+              <span>Current Model: {this.state.selectedOption}</span>
+              </div>
+          </center> 
+        
         
         <img src={mic} alt="mic" className="mic mt-3" />
         <br/>
@@ -218,24 +227,27 @@ export default class Mics extends React.Component {
           />
           } 
           <br/>
+          <span id="start-recording" style={{color:"blue"}}><i className="fa fa-check-circle" ></i> Click on start to start recording</span>
+          <span id="stop-recording" style={{color:"blue",display:"none"}}><i className="fa fa-check-circle" ></i> Click on stop to stop recording</span>
           <br/>
-          <button className='btn col-2' onClick={this.startRecording} type="button"><i className='fa fa-play' style={{paddingRight:"5px",color:"green"}}></i>Start</button>
-          <button className='btn col-2' onClick={this.stopRecording} type="button"><i className='fa fa-stop' style={{paddingRight:"5px",color:"green"}}></i> Stop</button>
+          <button className='btn col-2' onClick={this.startRecording} type="button"><i className='fa fa-play' style={{paddingRight:"5px",color:"black"}}></i>Start</button>
+          <button className='btn col-2' onClick={this.stopRecording} type="button"><i className='fa fa-stop' style={{paddingRight:"5px",color:"black"}}></i> Stop</button>
           
           {this.state.selectedOption === "Wav2Vec"?<button className='btn col-2' onClick={test_wav2vec} type="button">Transcript- WV</button>:
           <button className='btn col-2' onClick={test_own} type="button">Transcript- CNN</button>}
         </div>
         <br/>
-        <span id="showstatus" style={{color:"blue",display:"none"}}><i className="fa fa-info-circle" ></i> STT in Process...</span>
+        <span id="showstatus" style={{color:"green",display:"none"}}><i className="fa fa-info-circle" ></i> STT in Process...</span>
+        <span id="no-response" style={{color:'red'}}></span>
         
         <div class=" col">
             <div class=" col">
-            <p id="textsuccess" class=" contain col">
+            <p id="textsuccess" style={{color:'palevioletred'}} class="contain col">
             </p>
             </div>
         </div>
         {this.state.transcript === ""? null :<button id="sumbutton"className='btn col-2' onClick={handlesummary}> Summary </button>}
-        <span id="showstatus" style={{color:"blue",display:"none"}}><i className="fa fa-info-circle" ></i> Summary in Process...</span>
+        <span id="summarystatus" style={{color:"blue",display:"none"}}><i className="fa fa-info-circle" ></i> Summary in Process...</span>
         <br/>
         <center>
         <textarea  id="summary" style={{display:'none'}} class="col-lg-8 col-xs-8 col-md-8" value={this.state.summary}  disabled></textarea>
