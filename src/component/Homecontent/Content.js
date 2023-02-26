@@ -40,10 +40,10 @@ export default function Content() {
           <div className="success" id="model-success" style={{display:"none"}}>
             { model? <><i className='fas fa-2x fa-check-circle' style={{color:'white',paddingLeft:"40%",paddingTop:"4px"}}></i>
             <br/>
-            <span className="success-text" style={{color:'white',padding:'5px'}}>Model Load Success</span></>:<>
-            <i className='fas fa-2x fa-times-circle' style={{color:'red',paddingLeft:"40%",paddingTop:"4px"}}></i>
+            <span className="success-text" style={{color:'white',padding:'10px'}}>Model Load Success</span></>:<>
+            <i className='fas fa-2x fa-exclamation-triangle' style={{color:'white',paddingLeft:"40%",paddingTop:"4px"}}></i>
             <br/>
-            <span className="success-text" style={{color:'white',padding:'5px'}}>Server is Down</span></>
+            <span className="success-text" style={{color:'white',padding:'10px'}}>Server is Down</span></>
             }
             
           </div>  

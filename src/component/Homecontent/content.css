@@ -131,7 +131,7 @@ body hr{
 }
 .success{
   position:fixed;
-  top: 15%;
+  top: 0%;
   left: 5%;
   border-radius: 5px;
   background-color: rgb(15, 121, 52);
@@ -140,23 +140,12 @@ body hr{
 }
 
 @keyframes anime{
-  0%{
-    transform: scale(0);
-  }
-  25%{
-    transform: scale(1);
-  }
-  50%{
-    transform: scale(1.2);
-  }
-  75%{
-    transform: scale(1);
-  }
-  100%{
-    transform: scale(0);
-  }
+  /* move from top to down */
+  from { top: 0%; }
+  to { top: 20%; }
+
 }
-.fa-check-circle{
+.fa-check-circle,.fa-exclamation-triangle{
   animation-name: check-circle;
   animation-duration: 2s;
 }
