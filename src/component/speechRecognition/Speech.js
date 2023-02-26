@@ -36,7 +36,7 @@ function Speech() {
   
 
   
-  const getthesummary =(e)=>{
+  const getthesummary =async (e)=>{
     document.getElementById('summarybutton').disabled = true
     document.getElementById('summarybutton').style.cursor = 'not-allowed'
     let stringlength=audiofiletranscript.split(" ").length
@@ -55,7 +55,7 @@ function Speech() {
       }
       };
       
-      axios.post('http://localhost:8000/input-text',
+      await axios.post('http://localhost:8000/input-text',
       input, customConfig)
       .then(
         function(res){
@@ -127,7 +127,7 @@ function Speech() {
     document.getElementById('filename').innerHTML = e.target.files[0].name
   }
   }
-  const handleSubmit = (e) => {   
+  const handleSubmit =async (e) => {   
 
     if (audio===''){
       document.getElementById('nofile-error').style.display = 'block'
@@ -146,7 +146,7 @@ function Speech() {
         setLoadinggif_audio(true) 
         const formData = new FormData()
         formData.append('audio', audio)
-        axios.post(      
+        await axios.post(      
           'http://localhost:8000/audio', formData
           
         )
@@ -216,7 +216,7 @@ function Speech() {
           <span id="nofile-error" style={{display:'none'}}><i className='fa fa-exclamation-triangle'></i> Please Upload audio file</span>
           <br/>
           <input type="file" id="file" accept="audio/*" onChange={handleFile}/>
-          <label id="audiofile" htmlFor="file" className="btn btn-primary" style={{borderRadius:"0px",border:"2px dotted"}}><i className="fa fa-file" style={{color:"green"}}/>  Upload Audio File</label>
+          <label id="audiofile" htmlFor="file" className="btn btn-primary" style={{borderRadius:"0px",border:"2px dotted"}}><i className="fas fa-upload" style={{color:"green"}}/> Upload Audio File</label>
           <p id="filename"></p>
           <br/>
           <div id='audio-player' className="audio-player mt-3" style={{display:'none'}}>

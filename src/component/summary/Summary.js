@@ -63,7 +63,7 @@ export default function Summary() {
       }  
     console.log(txt.fileName,txt.fileContent)  
   }
-  const handleSubmit =(e) => {
+  const handleSubmit =async (e) => {
     if(text===''){
       document.getElementById('nofile-error').style.display='block';
       document.getElementById('txtfile').style.border='2px solid red';
@@ -76,7 +76,7 @@ export default function Summary() {
         setWaitstatus(true)     
         const formData= new FormData()      
         formData.append('text',text)
-        axios.post('http://localhost:8000/text',formData)
+        await axios.post("http://localhost:8000/text",formData)
         .then( 
           function(res){
             document.getElementById('summbtn').disabled=false;
@@ -126,7 +126,7 @@ export default function Summary() {
   }
   // <p>{txt.fileContent}</p>
   //this handles the connection to server submit click garesi acios le return garxa accordingly
-  const textSubmit = (e) => {    
+  const textSubmit = async(e) => {    
       if(input_text===''){
         document.getElementById('textholder').style.border='2px solid red';
         document.getElementById("input-text-error").innerHTML = "कृपया नेपाली मात्र प्रविष्ट गर्नुहोस् |";
@@ -153,7 +153,7 @@ export default function Summary() {
               'Content-Type': 'application/json'
               }};
               setTalakoWaitstatus(true)
-              axios.post('http://localhost:8000/input-text',input, customConfig)
+              await axios.post('http://localhost:8000/input-text',input, customConfig)
               .then(
                 function(res){            
                   setTalakoWaitstatus(false)            
@@ -193,7 +193,7 @@ export default function Summary() {
               <span id='nofile-error' className='error' style={{display:"none"}}><i className='fa fa-exclamation-triangle'></i> Please select the file</span>
               <br/>
               <input type="file" id="file" accept="text/plain" onChange={handleFile} required/>                            
-              <label id="txtfile" htmlFor="file" className="btn btn-primary" style={{border:"2px dotted",borderRadius:"0px"}}><i className="fas fa-file" style={{color:"green"}}/> Upload txt File</label>
+              <label id="txtfile" htmlFor="file" className="btn btn-primary" style={{border:"2px dotted",borderRadius:"0px"}}><i className="fas fa-upload" style={{color:"green"}}/> Upload txt File</label>
               <br/>
               <p className="filename col">
                 {txt.fileName} 

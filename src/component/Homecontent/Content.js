@@ -1,24 +1,55 @@
 
 import './content.css'
 import { Link } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect,useState} from 'react'
 import axios from 'axios'
 
 
 import wav2vec from '../../static/image/xlsr.png'
 
 export default function Content() {
-  useEffect(()=>{
-    axios.post('http://localhost:8000/loadmodel')
-    .then(res => console.log("model loaded "))
-    .catch(err => console.log(err))
-  },[])
+  const [model, setModel] = useState(false);
+  useEffect(() => {
+    axios
+      .post('http://localhost:8000/loadmodel')
+      .then((res) => {
+        setModel(true);
+        document.getElementById('model-success').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('model-success').style.display = 'none';
+          
+        }, 4000);
+      })
+      .catch(
+        (err) => {
+          setModel(false);
+          document.getElementById('model-success').style.display = 'block';
+          setTimeout(() => {
+            document.getElementById('model-success').style.display = 'none';
+            
+          }, 4000);
+
+        }
+      );
+  }, [])
   return (
     <div className='content'>
+        
         <div className='img'>
              {/* <img  className ="img"src= {img} alt="" /> */}
+          <div className="success" id="model-success" style={{display:"none"}}>
+            { model? <><i className='fas fa-2x fa-check-circle' style={{color:'white',paddingLeft:"40%",paddingTop:"4px"}}></i>
+            <br/>
+            <span className="success-text" style={{color:'white',padding:'5px'}}>Model Load Success</span></>:<>
+            <i className='fas fa-2x fa-times-circle' style={{color:'red',paddingLeft:"40%",paddingTop:"4px"}}></i>
+            <br/>
+            <span className="success-text" style={{color:'white',padding:'5px'}}>Server is Down</span></>
+            }
+            
+          </div>  
          
-        </div>    
+        </div>  
+        
         <h1 className="project-title text-center mt-3">स्वर-सारांश</h1>
         <h4 className="project-title project-title-english text-center mt-3">Automatic Nepali Speech Recognition and Summary</h4>
             

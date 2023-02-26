@@ -88,16 +88,18 @@ export default class Mics extends React.Component {
               'Content-Type': 'application/json'
             }
           }
-          axios.post('http://localhost:8000/input-text',input, customConfig).then((res) => {
+          await axios.post('http://localhost:8000/input-text',input, customConfig).then((res) => {
             this.setState({summary:res.data})
             document.getElementById("summary").style.display = "block";
             document.getElementById("showstatus").style.display = "none";
+            document.getElementById("summarystatus").style.display = "none";
             
         })
         .catch((error) => {
           alert(" Server Error")
           console.log(error)
           document.getElementById("showstatus").style.display = "none";
+          document.getElementById("summarystatus").style.display = "none";
         })
       }
       else{
@@ -105,11 +107,56 @@ export default class Mics extends React.Component {
         document.getElementById("showstatus").style.display = "none";
       }
       }  
-      const test_wav2vec = async (e) =>{
+      const test_wav2vec = async (e) =>{               
         //display the status and result
         document.getElementById("textsuccess").style.display = "none";
         document.getElementById("showstatus").style.display = "block";
         if (this.state.blobURL != null){
+          //disbale the transcript btn
+          document.getElementById("btn-transcript").disabled = true;
+          document.getElementById("btn-transcript").style.cursor = "not-allowed";
+          let blob = await fetch(this.state.blobURL).then(r => r.blob());
+          // console.log("blob: ", blob);
+          let wavFile = new File([blob], "audio.wav"); 
+          // {type:this.state.wavFileblob.type});
+          //   console.log(wavFile);
+          const formData = new FormData()
+          formData.append('audio', wavFile)
+          await axios.post(      
+            'http://localhost:8000/audio_live', formData
+            
+          )
+          .then((res)=> {
+            document.getElementById("textsuccess").style.display = "block";
+            document.getElementById("showstatus").style.display = "none";
+            document.getElementById("summarystatus").style.display = "none";
+            document.getElementById("textsuccess").innerHTML = res.data
+            this.setState({transcript:res.data})
+            console.log(this.state.transcript)
+            document.getElementById("btn-transcript").disabled = false;
+            document.getElementById("btn-transcript").style.cursor = "pointer";
+        
+          }  
+          )
+          .catch((error)=>{
+            document.getElementById("btn-transcript").disabled = false;
+            document.getElementById("btn-transcript").style.cursor = "pointer";
+            document.getElementById("showstatus").style.display = "none";
+            document.getElementById("no-response").innerHTML="No response from server"
+          })
+        }
+        else{
+          alert("Please record audio first")
+          document.getElementById("showstatus").style.display = "none";
+        }
+      //disbale the transcript btn
+      
+          
+     }
+     const test_own = async (e) =>{
+      document.getElementById("textsuccess").style.display = "none";
+      document.getElementById("showstatus").style.display = "block";
+      if (this.state.blobURL != null){
         let blob = await fetch(this.state.blobURL).then(r => r.blob());
         // console.log("blob: ", blob);
       
@@ -119,66 +166,28 @@ export default class Mics extends React.Component {
         //   console.log(wavFile);
         const formData = new FormData()
         formData.append('audio', wavFile)
-        axios.post(      
-          'http://localhost:8000/audio_live', formData
+        await axios.post(      
+          'http://localhost:8000/audio_live_own', formData
           
         )
         .then((res)=> {
-          document.getElementById("textsuccess").style.display = "block";
           document.getElementById("showstatus").style.display = "none";
-          document.getElementById("summarystatus").style.display = "none";
+          document.getElementById("textsuccess").style.display = "block";
           document.getElementById("textsuccess").innerHTML = res.data
           this.setState({transcript:res.data})
           console.log(this.state.transcript)
-       
+          
         }  
         )
         .catch((error)=>{
           document.getElementById("showstatus").style.display = "none";
-          document.getElementById("no-response").innerHTML="No response from server"
+            document.getElementById("no-response").innerHTML="No response from server"
         })
       }
       else{
         alert("Please record audio first")
         document.getElementById("showstatus").style.display = "none";
       }
-        
-     }
-     const test_own = async (e) =>{
-      document.getElementById("textsuccess").style.display = "none";
-      document.getElementById("showstatus").style.display = "block";
-      if (this.state.blobURL != null){
-      let blob = await fetch(this.state.blobURL).then(r => r.blob());
-      // console.log("blob: ", blob);
-    
-    
-      let wavFile = new File([blob], "audio.wav"); 
-      // {type:this.state.wavFileblob.type});
-      //   console.log(wavFile);
-      const formData = new FormData()
-      formData.append('audio', wavFile)
-      axios.post(      
-        'http://localhost:8000/audio_live_own', formData
-        
-      )
-      .then((res)=> {
-        document.getElementById("showstatus").style.display = "none";
-        document.getElementById("textsuccess").style.display = "block";
-        document.getElementById("textsuccess").innerHTML = res.data
-        this.setState({transcript:res.data})
-        console.log(this.state.transcript)
-        
-      }  
-      )
-      .catch((error)=>{
-        document.getElementById("showstatus").style.display = "none";
-          document.getElementById("no-response").innerHTML="No response from server"
-      })
-    }
-    else{
-      alert("Please record audio first")
-      document.getElementById("showstatus").style.display = "none";
-    }
       
    }
      let strokeColor=this.state.strokestate ? "green" : undefined
@@ -236,8 +245,8 @@ export default class Mics extends React.Component {
           <button className='btn col-2' onClick={this.startRecording} type="button"><i className='fa fa-play' style={{paddingRight:"5px",color:"black"}}></i>Start</button>
           <button className='btn col-2' onClick={this.stopRecording} type="button"><i className='fa fa-stop' style={{paddingRight:"5px",color:"black"}}></i> Stop</button>
           
-          {this.state.selectedOption === "Wav2Vec"?<button className='btn col-2' onClick={test_wav2vec} type="button">Transcript- WV</button>:
-          <button className='btn col-2' onClick={test_own} type="button">Transcript- CNN</button>}
+          {this.state.selectedOption === "Wav2Vec"?<button className='btn col-2' id="btn-transcript"onClick={test_wav2vec} type="button">Transcript- WV</button>:
+          <button className='btn col-2' id="btn-transcript" onClick={test_own} type="button">Transcript- CNN</button>}
         </div>
         <br/>
         <span id="showstatus" style={{color:"green",display:"none"}}><i className="fa fa-info-circle" ></i> STT in Process...</span>
