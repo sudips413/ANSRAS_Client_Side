@@ -240,8 +240,11 @@ export default class Mics extends React.Component {
           />
           } 
           <br/>
-          <span id="start-recording" style={{color:"blue"}}><i className="fa fa-check-circle" ></i> Click on start to start recording</span>
-          <span id="stop-recording" style={{color:"blue",display:"none"}}><i className="fa fa-check-circle" ></i> Click on stop to stop recording</span>
+          <span id="start-recording" style={{color:"blue"}}>Click on start to start recording</span>
+          <span id="stop-recording" style={{color:"blue",display:"none"}}>
+            <div className='record-status'><div className='circle'></div><span id="recording"style={{marginTop:"4px"}}> Recording</span></div>
+            Click on stop to stop recording
+          </span>
           <br/>
           <button className='btn col-2' onClick={this.startRecording} type="button"><i className='fa fa-play' style={{paddingRight:"5px",color:"black"}}></i>Start</button>
           <button className='btn col-2' onClick={this.stopRecording} type="button"><i className='fa fa-stop' style={{paddingRight:"5px",color:"black"}}></i> Stop</button>
