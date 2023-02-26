@@ -109,6 +109,7 @@ export default class Mics extends React.Component {
       }  
       const test_wav2vec = async (e) =>{               
         //display the status and result
+        document.getElementById("recordstatus").style.display = "none";
         document.getElementById("textsuccess").style.display = "none";
         document.getElementById("showstatus").style.display = "block";
         if (this.state.blobURL != null){
@@ -146,7 +147,7 @@ export default class Mics extends React.Component {
           })
         }
         else{
-          alert("Please record audio first")
+          document.getElementById("recordstatus").style.display = "block";
           document.getElementById("showstatus").style.display = "none";
         }
       //disbale the transcript btn
@@ -250,6 +251,7 @@ export default class Mics extends React.Component {
         </div>
         <br/>
         <span id="showstatus" style={{color:"green",display:"none"}}><i className="fa fa-info-circle" ></i> STT in Process...</span>
+        <span id="recordstatus" style={{color:"red",display:"none"}}><i className="fa fa-exclamation-triangle" ></i> Please Record Audio</span>
         <span id="no-response" style={{color:'red'}}></span>
         
         <div className=" col">
