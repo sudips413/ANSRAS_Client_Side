@@ -82,7 +82,7 @@ export default class Mics extends React.Component {
       const handlesummary = async (e) => {
         e.preventDefault();
         let audiolength = this.state.transcript.split(" ").length
-        if (audiolength > 50){
+        if (audiolength > 10){
           document.getElementById("summarystatus").style.display = "block";
 
           let data = {
@@ -94,7 +94,24 @@ export default class Mics extends React.Component {
               'Content-Type': 'application/json'
             }
           }
-          await axios.post('http://localhost:8000/input-text',input, customConfig).then((res) => {
+          console.log(this.selectedOptionSummary)
+          this.state.selectedOptionSummary === "Extractive"? 
+          await axios.post('http://localhost:8000/input-text',input, customConfig)
+          .then((res) => {
+            this.setState({summary:res.data})
+            document.getElementById("summary").style.display = "block";
+            document.getElementById("showstatus").style.display = "none";
+            document.getElementById("summarystatus").style.display = "none";
+            
+        })
+        .catch((error) => {
+          alert(" Server Error")
+          console.log(error)
+          document.getElementById("showstatus").style.display = "none";
+          document.getElementById("summarystatus").style.display = "none";
+        }) :
+          await axios.post('http://localhost:8000/abstract',input, customConfig)        
+          .then((res) => {
             this.setState({summary:res.data})
             document.getElementById("summary").style.display = "block";
             document.getElementById("showstatus").style.display = "none";
@@ -129,6 +146,7 @@ export default class Mics extends React.Component {
           //   console.log(wavFile);
           const formData = new FormData()
           formData.append('audio', wavFile)
+          
           await axios.post(      
             'http://localhost:8000/audio_live', formData
             
