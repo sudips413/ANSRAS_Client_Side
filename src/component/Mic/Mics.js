@@ -19,13 +19,19 @@ export default class Mics extends React.Component {
       status:false,
       strokestate:false,
       selectedOption: "Wav2Vec",
-      transcript:""
+      transcript:"",
+      selectedOptionSummary: "Extractive",
     }
   }
 
   changeOption = (e) => {
     let value = document.getElementById("select").value;
     this.setState({selectedOption:value});
+    // console.log(value);
+  }
+  changeOptionSummary = (e) => {
+    let value = document.getElementById("selectsummary").value;
+    this.setState({selectedOptionSummary:value});
     // console.log(value);
   }
 
@@ -263,7 +269,19 @@ export default class Mics extends React.Component {
             </p>
             </div>
         </div>
-        {this.state.transcript === ""? null :<button id="sumbutton"className='btn col-2' onClick={handlesummary}> Summary </button>}
+        {this.state.transcript === ""? null :<>
+        <center>       
+          <div className='model-selection col-lg-6 col-sm-12 col-xs-12 col-md-8'>
+            <span>Select Summary Method </span>
+            <select id="selectsummary" onChange={this.changeOptionSummary} style={{width:"30%"}}>
+              <option value="Extractive">Extractive</option>
+              <option value="Abstractive">Abstractive</option>
+            </select>         
+            <br/>
+            <span>Summary Method: {this.state.selectedOptionSummary}</span>
+          </div>
+        </center>
+        <button id="sumbutton"className='btn col-2' onClick={handlesummary}> Summary </button></>}
         <span id="summarystatus" style={{color:"blue",display:"none"}}><i className="fa fa-info-circle" ></i> Summary in Process...</span>
         <br/>
         <center>
