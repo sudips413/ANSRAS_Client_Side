@@ -22,6 +22,8 @@ export default function Content() {
       })
       .catch(
         (err) => {
+          console.log("no response");
+    
           setModel(false);
           document.getElementById('model-success').style.display = 'block';
           setTimeout(() => {
