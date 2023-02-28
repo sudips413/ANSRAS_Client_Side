@@ -96,7 +96,7 @@ export default class Mics extends React.Component {
           }
           console.log(this.selectedOptionSummary)
           this.state.selectedOptionSummary === "Extractive"? 
-          await axios.post('http://localhost:8000/input-text',input, customConfig)
+          await axios.post('http://tasr.eastus2.cloudapp.azure.com/input-text',input, customConfig)
           .then((res) => {
             this.setState({summary:res.data})
             document.getElementById("summary").style.display = "block";
@@ -110,7 +110,7 @@ export default class Mics extends React.Component {
           document.getElementById("showstatus").style.display = "none";
           document.getElementById("summarystatus").style.display = "none";
         }) :
-          await axios.post('http://localhost:8000/abstract',input, customConfig)        
+          await axios.post('http://tasr.eastus2.cloudapp.azure.com/abstract',input, customConfig)        
           .then((res) => {
             this.setState({summary:res.data})
             document.getElementById("summary").style.display = "block";
@@ -148,7 +148,7 @@ export default class Mics extends React.Component {
           formData.append('audio', wavFile)
           
           await axios.post(      
-            'http://localhost:8000/audio_live', formData
+            'http://tasr.eastus2.cloudapp.azure.com/audio_live', formData
             
           )
           .then((res)=> {
@@ -192,7 +192,7 @@ export default class Mics extends React.Component {
         const formData = new FormData()
         formData.append('audio', wavFile)
         await axios.post(      
-          'http://localhost:8000/audio_live_own', formData
+          'http://tasr.eastus2.cloudapp.azure.com/audio_live_own', formData
           
         )
         .then((res)=> {

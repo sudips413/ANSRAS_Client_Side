@@ -11,7 +11,7 @@ export default function Content() {
   const [model, setModel] = useState(false);
   useEffect(() => {
     axios
-      .post('http://localhost:8000/loadmodel')
+      .post('http://tasr.eastus2.cloudapp.azure.com/loadmodel')
       .then((res) => {
         setModel(true);
         document.getElementById('model-success').style.display = 'block';
