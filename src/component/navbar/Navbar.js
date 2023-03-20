@@ -9,7 +9,7 @@ export default function Navbar() {
     <div>
         <nav className="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
 			<div className="container" >    
-				<span className='navbar-brand'><Link className='links-title' to="/"><i className="fas fa-microphone"/> ANSRAS </Link></span>
+				<span className='navbar-brand'><Link className='links-title' to="/"><i className="fas fa-microphone"/> <p className="navbar-logo-anish">स्वर-सारांश </p></Link></span>
                 <button className="navbar-toggler text-white" type="button" 
                     data-toggle="collapse"
                     data-target="#navbarSupportedContent"
@@ -22,14 +22,14 @@ export default function Navbar() {
                 
                     <ul className="nav navbar-nav ml-auto">
                         
+                        <li className="nav-item"> 
+                            <span className="px-4 mr-3" ><Link  className='links' to="/mictest" > Live Speech and Summary</Link>    </span> 
+                        </li> 
                         <li className="nav-item "> 
                             <span className=" px-4 mr-3 "><Link className='links' to="/sr">Speech Recognition</Link></span> 
                         </li> 
                         <li className="nav-item"> 
-                            <span className="px-4 mr-3" ><Link className='links' to="/summary" > Summary</Link>    </span> 
-                        </li> 
-                        <li className="nav-item"> 
-                            <span className="px-4 mr-3" ><Link  className='links' to="/mictest" > RealTime Speech</Link>    </span> 
+                            <span className="px-4 mr-3" ><Link className='links' to="/summary" > Summarizer</Link>    </span> 
                         </li> 
                         <li className="nav-item"> 
                             <span className="px-4 mr-3" > <Link  className='links' to ="/teams">Team</Link></span> 

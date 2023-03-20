@@ -33,7 +33,7 @@ function Speech() {
   // const [wordcount , setWordcount] = useState(0)
   // const [wordcountsummary , setWordcountsummary] = useState(0)
 
-  
+  // const domain_to_server = "192.168.50.31:8000";
 
   
   const getthesummary =async (e)=>{
@@ -55,7 +55,9 @@ function Speech() {
       }
       };
       
-      await axios.post('http://tasr.eastus2.cloudapp.azure.com/input-text',
+      // await axios.post(`http://192.168.50.31:8000/input-text`,
+      // input, customConfig)
+      await axios.post(`http://localhost:8000/input-text`,
       input, customConfig)
       .then(
         function(res){
@@ -63,7 +65,7 @@ function Speech() {
           setsummarywait(false)
           document.getElementById('summarybutton').disabled = false
         document.getElementById('summarybutton').style.cursor = 'pointer'
-          setaudiosummary(res.data)
+          setaudiosummary(res.data.summary)
           var count = 0;
           for (var i = 0; i < res.data.length; i++) {
             if(res.data[i]===' '){
@@ -75,7 +77,7 @@ function Speech() {
          
           setDownloadbuttonstatus(true)
           
-          const downloadTextFile = JSON.stringify(res.data);
+          const downloadTextFile = JSON.stringify(res.data.summary);
           const blob = new Blob([downloadTextFile], { type: "text/plain" });
           const urls = URL.createObjectURL(blob);
           setUrl_text_input(urls)
@@ -147,8 +149,8 @@ function Speech() {
         const formData = new FormData()
         formData.append('audio', audio)
         await axios.post(      
-          'http://tasr.eastus2.cloudapp.azure.com/audio', formData
-          
+          // `http://192.168.50.31:8000/audio`, formData
+          `http://localhost:8000/audio`, formData
         )
         .then((res)=> {
           if(res.data==='fail'){
